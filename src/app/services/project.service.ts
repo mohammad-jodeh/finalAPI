@@ -69,4 +69,8 @@ export class ProjectService {
   async find(options: FindProjectOptions, userId: string): Promise<Project[]> {
     return this.projectRepo.find(options, userId);
   }
+
+  async findById(id: string): Promise<Project> {
+    return this.projectRepo.findById(id);
+  }
 }

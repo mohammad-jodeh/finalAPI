@@ -1,5 +1,5 @@
 import { injectable } from "tsyringe";
-import { RegisterUserDto } from "../../../domain/DTOs/userDTO";
+import { RegisterUserDto, UpdateUserDto } from "../../../domain/DTOs/userDTO";
 import { IUserRepo } from "../../../domain/IRepos/IUserRepo";
 import { AppDataSource } from "../data-source";
 import { User } from "../../../domain/entities/user.entity";
@@ -58,6 +58,27 @@ export class UserRepo implements IUserRepo {
   async updatePassword(email: string, newPassword: string): Promise<void> {
     try {
       await this._userRepo.update({ email }, { password: newPassword });
+    } catch (error) {
+      throw getDBError(error);
+    }
+  }
+
+  async update(id: string, dto: UpdateUserDto): Promise<User> {
+    try {
+      const affectedRows = (
+        await this._userRepo.update({ id }, dto)
+      ).affected;
+      if (!affectedRows) {
+        throw new UserError([`User with id ${id} not found.`], 404);
+      }
+      const updatedUser = await this._userRepo.findOneBy({ id });
+      if (!updatedUser) {
+        throw new UserError(
+          [`User with id ${id} not found after update.`],
+          404,
+        );
+      }
+      return updatedUser;
     } catch (error) {
       throw getDBError(error);
     }

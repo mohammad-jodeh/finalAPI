@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import {
   LoginUserDto,
   RegisterUserDto,
+  UpdateUserDto,
   UserResponseDto,
 } from "../../domain/DTOs/userDTO";
 import { UserError } from "../exceptions";
@@ -64,5 +65,10 @@ export class UserService {
   async getById(id: string) {
     const user = await this.userRepo.findById(id);
     return user ? new UserResponseDto(user) : null;
+  }
+
+  async update(id: string, dto: UpdateUserDto) {
+    const user = await this.userRepo.update(id, dto);
+    return new UserResponseDto(user);
   }
 }

@@ -84,4 +84,18 @@ export class ProjectController {
       next(error);
     }
   }
+
+  async findById(req: Request, res: Response, next: NextFunction) {
+    const { id } = req.params;
+
+    try {
+      const project = await this.projectService.findById(id);
+      res.status(200).json({
+        project: new ProjectResponseDto(project),
+        success: true,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 }

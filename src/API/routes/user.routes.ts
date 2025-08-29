@@ -33,5 +33,11 @@ export class UserRoutes extends BaseRoute {
       authenticate,
       controller.getUserByEmailOrId.bind(controller),
     );
+    this.router.patch(
+      "/:id",
+      authenticate,
+      restrictTokens(Token.ACCESS),
+      controller.update.bind(controller),
+    );
   }
 }

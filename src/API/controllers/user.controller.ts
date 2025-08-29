@@ -3,7 +3,7 @@ import { Request, Response, NextFunction } from "express";
 import { UserService } from "../../app/services/user.service";
 import { validate } from "class-validator";
 import { plainToInstance } from "class-transformer";
-import { RegisterUserDto, LoginUserDto, UserResponseDto } from "../../domain/DTOs/userDTO";
+import { RegisterUserDto, LoginUserDto, UpdateUserDto, UserResponseDto } from "../../domain/DTOs/userDTO";
 import { Token } from "../enums/token";
 import { genToken } from "../utils/token";
 import PostmarkSender from "../../infrastructure/email/postmarkSender";
@@ -173,6 +173,23 @@ export class UserController {
         throw new UserError("User not found", 404);
       }
 
+      res.status(200).json({ user, success: true });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async update(req: Request, res: Response, next: NextFunction) {
+    const { id } = req.params;
+    const dto = plainToInstance(UpdateUserDto, req.body);
+
+    try {
+      const errors = await validate(dto);
+      if (errors.length) {
+        throw new UserError(errors);
+      }
+
+      const user = await this.userService.update(id, dto);
       res.status(200).json({ user, success: true });
     } catch (error) {
       next(error);

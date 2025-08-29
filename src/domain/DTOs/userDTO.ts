@@ -1,4 +1,4 @@
-import { IsEmail, IsString, Length } from "class-validator";
+import { IsEmail, IsString, Length, IsOptional } from "class-validator";
 
 export class RegisterUserDto {
   @IsEmail()
@@ -20,6 +20,17 @@ export class LoginUserDto {
   @IsString()
   @Length(6, 255)
   password!: string;
+}
+
+export class UpdateUserDto {
+  @IsOptional()
+  @IsString()
+  @Length(1, 100)
+  fullName?: string;
+
+  @IsOptional()
+  @IsString()
+  image?: string;
 }
 
 export class UserResponseDto {

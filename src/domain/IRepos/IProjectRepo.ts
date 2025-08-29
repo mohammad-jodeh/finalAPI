@@ -7,4 +7,5 @@ export interface IProjectRepo {
   update(dto: UpdateProjectDTO): Promise<Project>;
   delete(id: string): Promise<void>;
   find(options: FindProjectOptions, userId?: string): Promise<Project[]>;
+  findById(id: string): Promise<Project>;
 }

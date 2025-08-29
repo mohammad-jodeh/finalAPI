@@ -95,4 +95,23 @@ export class ProjectRepo implements IProjectRepo {
       throw getDBError(error);
     }
   }
+
+  async findById(id: string): Promise<Project> {
+    try {
+      const project = await this._projectRepo
+        .createQueryBuilder("project")
+        .leftJoinAndSelect("project.members", "member")
+        .leftJoinAndSelect("member.user", "user")
+        .where("project.id = :id", { id })
+        .getOne();
+
+      if (!project) {
+        throw new UserError("Project not found", 404);
+      }
+
+      return project;
+    } catch (error) {
+      throw getDBError(error);
+    }
+  }
 }

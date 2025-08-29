@@ -18,6 +18,13 @@ export class NotificationRoutes extends BaseRoute {
       controller.getNotifications.bind(controller)
     );
 
+    // Get specific notification by ID
+    this.router.get(
+      "/:id",
+      authenticate,
+      controller.getNotificationById.bind(controller)
+    );
+
     // Get unread count
     this.router.get(
       "/unread-count",
@@ -45,7 +52,14 @@ export class NotificationRoutes extends BaseRoute {
       "/:id",
       authenticate,
       controller.deleteNotification.bind(controller)
-    );    // Create notification (admin/system use)
+    );
+
+    // Create notification (admin/system use)
+    this.router.post(
+      "/",
+      authenticate,
+      controller.createNotification.bind(controller)
+    );
    
   }
 }
